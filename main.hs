@@ -16,17 +16,14 @@ initialFilter = BloomFilter {
   vector = Sequence.replicate 50 False }
 bloomFilter = foldr (\word bf -> computeNewFilter bf word) initialFilter initialWords
 
-main = loop
-
-loop = do
+main = do
   str <- getLine
   () <- putStrLn $ boolToString $ checkFilter bloomFilter str
-  loop
+  main
 
 boolToString :: Bool -> String
 boolToString True = "TRUE"
 boolToString False = "FALSE"
-
 
 -- | Is the given string in the filter?
 checkFilter :: BloomFilter -> String -> Bool
@@ -37,7 +34,7 @@ checkFilter bf str =
     hashIndexes = getHashIndexes bf str
   in and $ map (\idx -> indexEx vec idx) hashIndexes
 
--- | Compute a new bit vector for the given string, with a list of hash seeds.
+-- | Compute a new bit vector for the given string, with a list of hash seeds
 computeNewFilter :: BloomFilter -> String -> BloomFilter
 computeNewFilter bf [] = bf
 computeNewFilter bf str =
